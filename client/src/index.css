@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Glass morphism utilities */
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 50%, #8b5cf6 100%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+}
+
+/* Message bubble styles */
+.message-sent {
+  @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-2xl rounded-br-md;
+}
+
+.message-received {
+  @apply bg-dark-100 dark:bg-dark-700 text-dark-900 dark:text-dark-100 rounded-2xl rounded-bl-md;
+}
+
+/* Typing indicator */
+.typing-dot {
+  @apply w-2 h-2 bg-dark-400 dark:bg-dark-500 rounded-full;
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Online status indicator */
+.online-indicator {
+  @apply w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-dark-800;
+  animation: pulse 2s infinite;
+}
+
+/* Input focus ring */
+.input-focus-ring {
+  @apply transition-all duration-200 ease-out;
+  @apply focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500;
+}
+
+/* Button hover effects */
+.btn-hover {
+  @apply transition-all duration-200 ease-out;
+  @apply hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0;
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-all duration-300 ease-out;
+  @apply hover:shadow-xl hover:-translate-y-1;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, border-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+}
+
+/* Hide scrollbar for chat list but allow scrolling */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
