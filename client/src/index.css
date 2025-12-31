@@ -4,92 +4,37 @@
 /* Custom theme with CSS variables for Tailwind v4 */
 @theme {
   /* Primary colors */
-  --color-primary-50: #f0f9ff;
-  --color-primary-100: #e0f2fe;
-  --color-primary-200: #bae6fd;
-  --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: #0ea5e9;
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: #075985;
-  --color-primary-900: #0c4a6e;
-  --color-primary-950: #082f49;
+  --color-primary-50: oklch(0.97 0.02 205);
+  --color-primary-100: oklch(0.94 0.04 205);
+  --color-primary-200: oklch(0.88 0.08 205);
+  --color-primary-300: oklch(0.79 0.12 205);
+  --color-primary-400: oklch(0.70 0.16 205);
+  --color-primary-500: oklch(0.62 0.19 205);
+  --color-primary-600: oklch(0.54 0.17 205);
+  --color-primary-700: oklch(0.46 0.14 205);
+  --color-primary-800: oklch(0.40 0.11 205);
+  --color-primary-900: oklch(0.35 0.08 205);
+  --color-primary-950: oklch(0.26 0.06 205);
 
-  /* Dark theme colors */
-  --color-dark-50: #f8fafc;
-  --color-dark-100: #f1f5f9;
-  --color-dark-200: #e2e8f0;
-  --color-dark-300: #cbd5e1;
-  --color-dark-400: #94a3b8;
-  --color-dark-500: #64748b;
-  --color-dark-600: #475569;
-  --color-dark-700: #334155;
-  --color-dark-800: #1e293b;
-  --color-dark-900: #0f172a;
-  --color-dark-950: #020617;
+  /* Dark/Slate theme colors */
+  --color-dark-50: oklch(0.98 0.01 260);
+  --color-dark-100: oklch(0.96 0.01 260);
+  --color-dark-200: oklch(0.91 0.02 260);
+  --color-dark-300: oklch(0.83 0.02 260);
+  --color-dark-400: oklch(0.65 0.02 260);
+  --color-dark-500: oklch(0.50 0.02 260);
+  --color-dark-600: oklch(0.40 0.02 260);
+  --color-dark-700: oklch(0.32 0.02 260);
+  --color-dark-800: oklch(0.24 0.02 260);
+  --color-dark-900: oklch(0.18 0.02 260);
+  --color-dark-950: oklch(0.12 0.02 260);
 
   /* Font family */
   --font-sans: 'Inter', system-ui, sans-serif;
-
-  /* Custom animations */
-  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-fade-in: fadeIn 0.3s ease-out;
-  --animate-slide-up: slideUp 0.3s ease-out;
-  --animate-slide-in-right: slideInRight 0.3s ease-out;
-  --animate-bounce-subtle: bounceSubtle 0.5s ease-out;
-
-  /* Keyframes */
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideUp {
-    0% {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideInRight {
-    0% {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes bounceSubtle {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-5px);
-    }
-  }
-
-  /* Custom box shadows */
-  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.3);
-  --shadow-glow-lg: 0 0 40px rgba(14, 165, 233, 0.4);
 }
+
+/* Enable class-based dark mode */
+@variant dark (&:where(.dark, .dark *));
 
 * {
   margin: 0;
@@ -135,36 +80,52 @@ body {
 }
 
 /* Glass morphism utilities */
-.glass {
+@utility glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
-.glass-dark {
+@utility glass-dark {
   background: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
-.gradient-primary {
+@utility gradient-primary {
   background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
 }
 
-.gradient-accent {
+@utility gradient-accent {
   background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 50%, #8b5cf6 100%);
 }
 
-.text-gradient {
+@utility text-gradient {
   background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.animate-gradient {
+@utility animate-gradient {
   background-size: 200% 200%;
   animation: gradientShift 3s ease infinite;
+}
+
+@utility shadow-glow {
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+}
+
+@utility shadow-glow-lg {
+  box-shadow: 0 0 40px rgba(14, 165, 233, 0.4);
+}
+
+@utility animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes gradientShift {
@@ -177,6 +138,26 @@ body {
   50% {
     background-position: 100% 50%;
   }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Hide scrollbar - regular CSS class */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Message bubble styles */
@@ -251,30 +232,4 @@ body {
 
 .dark .online-indicator {
   border-color: #1e293b;
-}
-
-/* Shadow utilities */
-.shadow-glow {
-  box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
-}
-
-.shadow-glow-lg {
-  box-shadow: 0 0 40px rgba(14, 165, 233, 0.4);
-}
-
-/* Smooth transitions for theme changes */
-* {
-  transition-property: background-color, border-color;
-  transition-duration: 200ms;
-  transition-timing-function: ease-out;
-}
-
-/* Hide scrollbar for chat list but allow scrolling */
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
 }
