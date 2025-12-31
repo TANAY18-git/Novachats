@@ -1,8 +1,95 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Custom theme with CSS variables for Tailwind v4 */
+@theme {
+  /* Primary colors */
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+  --color-primary-950: #082f49;
+
+  /* Dark theme colors */
+  --color-dark-50: #f8fafc;
+  --color-dark-100: #f1f5f9;
+  --color-dark-200: #e2e8f0;
+  --color-dark-300: #cbd5e1;
+  --color-dark-400: #94a3b8;
+  --color-dark-500: #64748b;
+  --color-dark-600: #475569;
+  --color-dark-700: #334155;
+  --color-dark-800: #1e293b;
+  --color-dark-900: #0f172a;
+  --color-dark-950: #020617;
+
+  /* Font family */
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Custom animations */
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fadeIn 0.3s ease-out;
+  --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-slide-in-right: slideInRight 0.3s ease-out;
+  --animate-bounce-subtle: bounceSubtle 0.5s ease-out;
+
+  /* Keyframes */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes bounceSubtle {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* Custom box shadows */
+  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.3);
+  --shadow-glow-lg: 0 0 40px rgba(14, 165, 233, 0.4);
+}
 
 * {
   margin: 0;
@@ -48,91 +135,131 @@ body {
 }
 
 /* Glass morphism utilities */
-@layer utilities {
-  .glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  
-  .glass-dark {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.glass-dark {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gradient-primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 50%, #8b5cf6 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
   }
 
-  .gradient-primary {
-    background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
-  }
-
-  .gradient-accent {
-    background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 50%, #8b5cf6 100%);
-  }
-
-  .text-gradient {
-    background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradientShift 3s ease infinite;
-  }
-
-  @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  50% {
+    background-position: 100% 50%;
   }
 }
 
 /* Message bubble styles */
 .message-sent {
-  @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-2xl rounded-br-md;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border-radius: 1rem;
+  border-bottom-right-radius: 0.375rem;
 }
 
 .message-received {
-  @apply bg-dark-100 dark:bg-dark-700 text-dark-900 dark:text-dark-100 rounded-2xl rounded-bl-md;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border-radius: 1rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.dark .message-received {
+  background-color: #334155;
+  color: #f1f5f9;
 }
 
 /* Typing indicator */
 .typing-dot {
-  @apply w-2 h-2 bg-dark-400 dark:bg-dark-500 rounded-full;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #94a3b8;
+  border-radius: 9999px;
   animation: typingBounce 1.4s infinite ease-in-out both;
 }
 
-.typing-dot:nth-child(1) { animation-delay: -0.32s; }
-.typing-dot:nth-child(2) { animation-delay: -0.16s; }
-.typing-dot:nth-child(3) { animation-delay: 0s; }
+.dark .typing-dot {
+  background-color: #64748b;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0s;
+}
 
 @keyframes typingBounce {
-  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
-  40% { transform: scale(1); opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Online status indicator */
 .online-indicator {
-  @apply w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-dark-800;
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: #22c55e;
+  border-radius: 9999px;
+  border: 2px solid white;
   animation: pulse 2s infinite;
 }
 
-/* Input focus ring */
-.input-focus-ring {
-  @apply transition-all duration-200 ease-out;
-  @apply focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500;
+.dark .online-indicator {
+  border-color: #1e293b;
 }
 
-/* Button hover effects */
-.btn-hover {
-  @apply transition-all duration-200 ease-out;
-  @apply hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0;
+/* Shadow utilities */
+.shadow-glow {
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
 }
 
-/* Card hover effects */
-.card-hover {
-  @apply transition-all duration-300 ease-out;
-  @apply hover:shadow-xl hover:-translate-y-1;
+.shadow-glow-lg {
+  box-shadow: 0 0 40px rgba(14, 165, 233, 0.4);
 }
 
 /* Smooth transitions for theme changes */
