@@ -55,8 +55,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Index for faster queries
-userSchema.index({ username: 1 });
+// Index for faster queries (username already indexed via unique: true)
 userSchema.index({ 'chatLink.code': 1 });
 
 // Hash password before saving
