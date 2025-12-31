@@ -33,20 +33,15 @@ const Settings = () => {
 
     const passwordChecks = {
         length: passwordData.newPassword.length >= 6,
-        uppercase: /[A-Z]/.test(passwordData.newPassword),
-        lowercase: /[a-z]/.test(passwordData.newPassword),
-        number: /\d/.test(passwordData.newPassword),
         match: passwordData.newPassword === passwordData.confirmPassword && passwordData.confirmPassword.length > 0
     };
 
     const handleProfileUpdate = async (e) => {
         e.preventDefault();
-
         if (!profileData.name.trim()) {
             toast.error('Name is required');
             return;
         }
-
         const result = await updateProfile(profileData);
         if (result.success) {
             toast.success('Profile updated successfully');
@@ -57,17 +52,14 @@ const Settings = () => {
 
     const handlePasswordUpdate = async (e) => {
         e.preventDefault();
-
         if (!passwordData.currentPassword) {
             toast.error('Current password is required');
             return;
         }
-
-        if (!Object.values(passwordChecks).every(Boolean)) {
+        if (!passwordChecks.length || !passwordChecks.match) {
             toast.error('Please meet all password requirements');
             return;
         }
-
         const result = await updatePassword(passwordData.currentPassword, passwordData.newPassword);
         if (result.success) {
             toast.success('Password updated successfully');
@@ -80,21 +72,17 @@ const Settings = () => {
     const handlePictureChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
         if (!file.type.startsWith('image/')) {
             toast.error('Please select an image file');
             return;
         }
-
         if (file.size > 5 * 1024 * 1024) {
             toast.error('Image must be less than 5MB');
             return;
         }
-
         setUploadingPicture(true);
         const result = await updateProfilePicture(file);
         setUploadingPicture(false);
-
         if (result.success) {
             toast.success('Profile picture updated');
         } else {
@@ -115,163 +103,114 @@ const Settings = () => {
     };
 
     return (
-        <div className="min-h-screen bg-dark-100 dark:bg-dark-900">
+        <div className="settings-page">
             {/* Header */}
-            <header className="sticky top-0 z-20 bg-white/80 dark:bg-dark-800/80 backdrop-blur-lg border-b border-dark-200 dark:border-dark-700">
-                <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/')}
-                        className="p-2 hover:bg-dark-100 dark:hover:bg-dark-700 rounded-xl transition-colors"
-                    >
-                        <ArrowLeft className="w-5 h-5 text-dark-600 dark:text-dark-300" />
-                    </button>
-                    <h1 className="text-xl font-bold text-dark-900 dark:text-white">Settings</h1>
-                </div>
+            <header className="settings-header">
+                <button className="icon-btn" onClick={() => navigate('/')}>
+                    <ArrowLeft size={20} />
+                </button>
+                <h1>Settings</h1>
             </header>
 
-            <main className="max-w-2xl mx-auto px-4 py-6">
+            <main className="settings-content">
                 {/* Profile Picture */}
-                <div className="text-center mb-8">
-                    <div className="relative inline-block">
-                        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary-500 to-purple-500 p-1">
-                            <div className="w-full h-full rounded-full bg-dark-100 dark:bg-dark-800 flex items-center justify-center overflow-hidden">
-                                {user?.profilePicture ? (
-                                    <img
-                                        src={getProfilePictureUrl()}
-                                        alt={user.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <MessageCircle className="w-10 h-10 text-dark-400" />
-                                )}
-                            </div>
+                <div className="profile-section">
+                    <div className="profile-avatar-wrapper">
+                        <div className="profile-avatar">
+                            {user?.profilePicture ? (
+                                <img src={getProfilePictureUrl()} alt={user.name} />
+                            ) : (
+                                <MessageCircle size={36} color="#64748b" />
+                            )}
                         </div>
                         <button
+                            className="avatar-upload-btn"
                             onClick={() => fileInputRef.current?.click()}
                             disabled={uploadingPicture}
-                            className="absolute bottom-0 right-0 p-2.5 gradient-primary rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
                         >
-                            {uploadingPicture ? (
-                                <Loader2 className="w-5 h-5 text-white animate-spin" />
-                            ) : (
-                                <Camera className="w-5 h-5 text-white" />
-                            )}
+                            {uploadingPicture ? <Loader2 size={18} className="animate-spin" /> : <Camera size={18} />}
                         </button>
                         <input
                             ref={fileInputRef}
                             type="file"
                             accept="image/*"
                             onChange={handlePictureChange}
-                            className="hidden"
+                            style={{ display: 'none' }}
                         />
                     </div>
-                    <h2 className="mt-4 text-xl font-bold text-dark-900 dark:text-white">{user?.name}</h2>
-                    <p className="text-dark-500">@{user?.username}</p>
+                    <h2>{user?.name}</h2>
+                    <p>@{user?.username}</p>
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-2 mb-6 p-1 bg-dark-200 dark:bg-dark-800 rounded-xl">
+                <div className="settings-tabs">
                     <button
+                        className={`settings-tab ${activeTab === 'profile' ? 'active' : ''}`}
                         onClick={() => setActiveTab('profile')}
-                        className={`flex-1 py-2.5 rounded-lg font-medium transition-all ${activeTab === 'profile'
-                                ? 'bg-white dark:bg-dark-700 text-dark-900 dark:text-white shadow'
-                                : 'text-dark-500 hover:text-dark-700 dark:hover:text-dark-300'
-                            }`}
                     >
-                        <User className="w-4 h-4 inline-block mr-2" />
+                        <User size={16} />
                         Profile
                     </button>
                     <button
+                        className={`settings-tab ${activeTab === 'security' ? 'active' : ''}`}
                         onClick={() => setActiveTab('security')}
-                        className={`flex-1 py-2.5 rounded-lg font-medium transition-all ${activeTab === 'security'
-                                ? 'bg-white dark:bg-dark-700 text-dark-900 dark:text-white shadow'
-                                : 'text-dark-500 hover:text-dark-700 dark:hover:text-dark-300'
-                            }`}
                     >
-                        <Lock className="w-4 h-4 inline-block mr-2" />
+                        <Lock size={16} />
                         Security
                     </button>
                 </div>
 
                 {/* Profile Tab */}
                 {activeTab === 'profile' && (
-                    <div className="space-y-6">
-                        <form onSubmit={handleProfileUpdate} className="bg-white dark:bg-dark-800 rounded-2xl p-6 shadow-sm">
-                            <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">Profile Information</h3>
+                    <div className="settings-section">
+                        <form onSubmit={handleProfileUpdate} className="settings-card">
+                            <h3>Profile Information</h3>
 
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-dark-600 dark:text-dark-300 mb-2">
-                                        Full Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={profileData.name}
-                                        onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                                        className="w-full px-4 py-3 bg-dark-50 dark:bg-dark-700 border border-dark-200 dark:border-dark-600 rounded-xl text-dark-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-dark-600 dark:text-dark-300 mb-2">
-                                        Username
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={profileData.username}
-                                        onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
-                                        className="w-full px-4 py-3 bg-dark-50 dark:bg-dark-700 border border-dark-200 dark:border-dark-600 rounded-xl text-dark-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Full Name</label>
+                                <input
+                                    type="text"
+                                    value={profileData.name}
+                                    onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                                    className="settings-input"
+                                />
                             </div>
 
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="mt-6 w-full py-3 gradient-primary rounded-xl text-white font-semibold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
-                            >
-                                {isLoading ? (
-                                    <Loader2 className="w-5 h-5 mx-auto animate-spin" />
-                                ) : (
-                                    'Save Changes'
-                                )}
+                            <div className="form-group">
+                                <label className="form-label">Username</label>
+                                <input
+                                    type="text"
+                                    value={profileData.username}
+                                    onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
+                                    className="settings-input"
+                                />
+                            </div>
+
+                            <button type="submit" className="btn-primary" style={{ width: '100%', marginTop: '8px' }} disabled={isLoading}>
+                                {isLoading ? <Loader2 size={18} className="animate-spin" /> : 'Save Changes'}
                             </button>
                         </form>
 
                         {/* Theme Toggle */}
-                        <div className="bg-white dark:bg-dark-800 rounded-2xl p-6 shadow-sm">
-                            <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">Appearance</h3>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    {theme === 'dark' ? (
-                                        <Moon className="w-5 h-5 text-primary-500" />
-                                    ) : (
-                                        <Sun className="w-5 h-5 text-amber-500" />
-                                    )}
+                        <div className="settings-card">
+                            <h3>Appearance</h3>
+                            <div className="theme-toggle-row">
+                                <div className="theme-info">
+                                    {theme === 'dark' ? <Moon size={20} color="#0ea5e9" /> : <Sun size={20} color="#f59e0b" />}
                                     <div>
-                                        <p className="font-medium text-dark-900 dark:text-white">Dark Mode</p>
-                                        <p className="text-sm text-dark-500">
-                                            {theme === 'dark' ? 'Currently enabled' : 'Currently disabled'}
-                                        </p>
+                                        <p className="theme-label">Dark Mode</p>
+                                        <p className="theme-status">{theme === 'dark' ? 'Currently enabled' : 'Currently disabled'}</p>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={toggleTheme}
-                                    className={`w-14 h-8 rounded-full transition-colors relative ${theme === 'dark' ? 'bg-primary-500' : 'bg-dark-300'
-                                        }`}
-                                >
-                                    <div className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow transition-transform ${theme === 'dark' ? 'translate-x-7' : 'translate-x-1'
-                                        }`} />
+                                <button className={`toggle-switch ${theme === 'dark' ? 'active' : ''}`} onClick={toggleTheme}>
+                                    <span className="toggle-knob" />
                                 </button>
                             </div>
                         </div>
 
                         {/* Logout */}
-                        <button
-                            onClick={handleLogout}
-                            className="w-full py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
-                        >
-                            <LogOut className="w-5 h-5" />
+                        <button className="logout-btn" onClick={handleLogout}>
+                            <LogOut size={18} />
                             Logout
                         </button>
                     </div>
@@ -279,98 +218,83 @@ const Settings = () => {
 
                 {/* Security Tab */}
                 {activeTab === 'security' && (
-                    <form onSubmit={handlePasswordUpdate} className="bg-white dark:bg-dark-800 rounded-2xl p-6 shadow-sm">
-                        <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">Change Password</h3>
+                    <form onSubmit={handlePasswordUpdate} className="settings-card">
+                        <h3>Change Password</h3>
 
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-dark-600 dark:text-dark-300 mb-2">
-                                    Current Password
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type={showPasswords.current ? 'text' : 'password'}
-                                        value={passwordData.currentPassword}
-                                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                                        className="w-full px-4 py-3 pr-12 bg-dark-50 dark:bg-dark-700 border border-dark-200 dark:border-dark-600 rounded-xl text-dark-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400"
-                                    >
-                                        {showPasswords.current ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-dark-600 dark:text-dark-300 mb-2">
-                                    New Password
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type={showPasswords.new ? 'text' : 'password'}
-                                        value={passwordData.newPassword}
-                                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                                        className="w-full px-4 py-3 pr-12 bg-dark-50 dark:bg-dark-700 border border-dark-200 dark:border-dark-600 rounded-xl text-dark-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400"
-                                    >
-                                        {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                    </button>
-                                </div>
-
-                                {passwordData.newPassword && (
-                                    <div className="mt-2 space-y-1">
-                                        <CheckItem checked={passwordChecks.length} text="At least 6 characters" />
-                                        <CheckItem checked={passwordChecks.uppercase} text="One uppercase letter" />
-                                        <CheckItem checked={passwordChecks.lowercase} text="One lowercase letter" />
-                                        <CheckItem checked={passwordChecks.number} text="One number" />
-                                    </div>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-dark-600 dark:text-dark-300 mb-2">
-                                    Confirm New Password
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type={showPasswords.confirm ? 'text' : 'password'}
-                                        value={passwordData.confirmPassword}
-                                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                                        className="w-full px-4 py-3 pr-12 bg-dark-50 dark:bg-dark-700 border border-dark-200 dark:border-dark-600 rounded-xl text-dark-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400"
-                                    >
-                                        {showPasswords.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                    </button>
-                                </div>
-                                {passwordData.confirmPassword && (
-                                    <div className="mt-2">
-                                        <CheckItem checked={passwordChecks.match} text="Passwords match" />
-                                    </div>
-                                )}
+                        <div className="form-group">
+                            <label className="form-label">Current Password</label>
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type={showPasswords.current ? 'text' : 'password'}
+                                    value={passwordData.currentPassword}
+                                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                    className="settings-input"
+                                    style={{ paddingRight: '46px' }}
+                                />
+                                <button
+                                    type="button"
+                                    className="input-toggle-btn"
+                                    onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                                >
+                                    {showPasswords.current ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
                             </div>
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="mt-6 w-full py-3 gradient-primary rounded-xl text-white font-semibold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
-                        >
-                            {isLoading ? (
-                                <Loader2 className="w-5 h-5 mx-auto animate-spin" />
-                            ) : (
-                                'Update Password'
-                            )}
+                        <div className="form-group">
+                            <label className="form-label">New Password</label>
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type={showPasswords.new ? 'text' : 'password'}
+                                    value={passwordData.newPassword}
+                                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                    className="settings-input"
+                                    style={{ paddingRight: '46px' }}
+                                />
+                                <button
+                                    type="button"
+                                    className="input-toggle-btn"
+                                    onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                                >
+                                    {showPasswords.new ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">Confirm New Password</label>
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    type={showPasswords.confirm ? 'text' : 'password'}
+                                    value={passwordData.confirmPassword}
+                                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                                    className="settings-input"
+                                    style={{ paddingRight: '46px' }}
+                                />
+                                <button
+                                    type="button"
+                                    className="input-toggle-btn"
+                                    onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                                >
+                                    {showPasswords.confirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Password Requirements */}
+                        <div className="password-requirements">
+                            <div className={`password-check ${passwordChecks.length ? 'valid' : 'invalid'}`}>
+                                {passwordChecks.length ? <Check size={14} /> : <X size={14} />}
+                                At least 6 characters
+                            </div>
+                            <div className={`password-check ${passwordChecks.match ? 'valid' : 'invalid'}`}>
+                                {passwordChecks.match ? <Check size={14} /> : <X size={14} />}
+                                Passwords match
+                            </div>
+                        </div>
+
+                        <button type="submit" className="btn-primary" style={{ width: '100%' }} disabled={isLoading}>
+                            {isLoading ? <Loader2 size={18} className="animate-spin" /> : 'Update Password'}
                         </button>
                     </form>
                 )}
@@ -378,12 +302,5 @@ const Settings = () => {
         </div>
     );
 };
-
-const CheckItem = ({ checked, text }) => (
-    <div className={`flex items-center gap-2 text-sm ${checked ? 'text-green-500' : 'text-dark-500'}`}>
-        {checked ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
-        <span>{text}</span>
-    </div>
-);
 
 export default Settings;
