@@ -1,18 +1,16 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    ArrowLeft, User, Lock, Camera, Moon, Sun, Loader2,
+    ArrowLeft, User, Lock, Camera, Loader2,
     Eye, EyeOff, Check, X, LogOut, MessageCircle
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../store/authStore';
-import useThemeStore from '../store/themeStore';
 
 const Settings = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
     const { user, updateProfile, updatePassword, updateProfilePicture, logout, isLoading } = useAuthStore();
-    const { theme, toggleTheme } = useThemeStore();
 
     const [activeTab, setActiveTab] = useState('profile');
     const [profileData, setProfileData] = useState({
@@ -190,23 +188,6 @@ const Settings = () => {
                                 {isLoading ? <Loader2 size={18} className="animate-spin" /> : 'Save Changes'}
                             </button>
                         </form>
-
-                        {/* Theme Toggle */}
-                        <div className="settings-card">
-                            <h3>Appearance</h3>
-                            <div className="theme-toggle-row">
-                                <div className="theme-info">
-                                    {theme === 'dark' ? <Moon size={20} color="#0ea5e9" /> : <Sun size={20} color="#f59e0b" />}
-                                    <div>
-                                        <p className="theme-label">Dark Mode</p>
-                                        <p className="theme-status">{theme === 'dark' ? 'Currently enabled' : 'Currently disabled'}</p>
-                                    </div>
-                                </div>
-                                <button className={`toggle-switch ${theme === 'dark' ? 'active' : ''}`} onClick={toggleTheme}>
-                                    <span className="toggle-knob" />
-                                </button>
-                            </div>
-                        </div>
 
                         {/* Logout */}
                         <button className="logout-btn" onClick={handleLogout}>
