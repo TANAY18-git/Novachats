@@ -72,11 +72,12 @@ const Sidebar = ({ onChatSelect, selectedChatId }) => {
         <>
             <div className="sidebar h-full flex flex-col">
                 {/* Header */}
-                <div className="p-5 border-b border-dark-200 dark:border-dark-700">
+                <div className="sidebar-header p-5">
                     <div className="flex items-center justify-between mb-5">
                         <div className="flex items-center gap-3">
+                            {/* Avatar with gradient ring */}
                             <div className="avatar-ring">
-                                <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden">
+                                <div className="w-11 h-11 flex items-center justify-center overflow-hidden bg-dark-800">
                                     {user?.profilePicture ? (
                                         <img
                                             src={getProfilePictureUrl(user.profilePicture)}
@@ -84,31 +85,29 @@ const Sidebar = ({ onChatSelect, selectedChatId }) => {
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full gradient-primary flex items-center justify-center">
-                                            <MessageCircle className="w-5 h-5 text-white" />
-                                        </div>
+                                        <MessageCircle className="w-5 h-5 text-primary-400" />
                                     )}
                                 </div>
                             </div>
                             <div>
-                                <h1 className="text-lg font-bold text-dark-900 dark:text-white">Novachats</h1>
-                                <p className="text-xs text-dark-500">@{user?.username}</p>
+                                <h1 className="text-lg font-bold text-white dark:text-white">Novachats</h1>
+                                <p className="text-xs text-primary-400">@{user?.username}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setShowLinkModal(true)}
-                                className="p-2.5 bg-dark-100 dark:bg-dark-700 hover:bg-dark-200 dark:hover:bg-dark-600 rounded-xl transition-all shadow-sm"
+                                className="icon-btn"
                                 title="Generate chat link"
                             >
-                                <Link2 className="w-5 h-5 text-dark-600 dark:text-dark-300" />
+                                <Link2 className="w-5 h-5 text-dark-300" />
                             </button>
                             <button
                                 onClick={() => navigate('/settings')}
-                                className="p-2.5 bg-dark-100 dark:bg-dark-700 hover:bg-dark-200 dark:hover:bg-dark-600 rounded-xl transition-all shadow-sm"
+                                className="icon-btn"
                                 title="Settings"
                             >
-                                <Settings className="w-5 h-5 text-dark-600 dark:text-dark-300" />
+                                <Settings className="w-5 h-5 text-dark-300" />
                             </button>
                         </div>
                     </div>
@@ -121,13 +120,13 @@ const Sidebar = ({ onChatSelect, selectedChatId }) => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search chats..."
-                            className="input-styled w-full pl-12 pr-4 py-3 text-dark-900 dark:text-white placeholder-dark-400"
+                            className="sidebar-search w-full pl-12 pr-4 py-3"
                         />
                     </div>
                 </div>
 
                 {/* Chat List */}
-                <div className="flex-1 overflow-y-auto hide-scrollbar">
+                <div className="flex-1 overflow-y-auto hide-scrollbar px-2 py-2">
                     {filteredChats.length > 0 ? (
                         filteredChats.map(chat => (
                             <ChatListItem
@@ -139,11 +138,11 @@ const Sidebar = ({ onChatSelect, selectedChatId }) => {
                         ))
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                            <div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-purple-100 dark:from-dark-700 dark:to-dark-600 rounded-full flex items-center justify-center mb-5 shadow-lg">
-                                <MessageCircle className="w-10 h-10 text-primary-500" />
+                            <div className="empty-state-icon w-20 h-20 rounded-full flex items-center justify-center mb-5">
+                                <MessageCircle className="w-10 h-10 text-primary-400" />
                             </div>
-                            <h3 className="text-lg font-bold text-dark-900 dark:text-white mb-2">No chats yet</h3>
-                            <p className="text-sm text-dark-500 mb-5">
+                            <h3 className="text-lg font-bold text-white mb-2">No chats yet</h3>
+                            <p className="text-sm text-dark-400 mb-5">
                                 Generate a chat link to start a conversation
                             </p>
                             <button
