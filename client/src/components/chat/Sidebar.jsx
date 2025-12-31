@@ -51,116 +51,106 @@ const Sidebar = ({ onChatSelect, selectedChatId }) => {
 
     return (
         <>
-            <div className="sidebar h-full flex flex-col">
-                {/* Header */}
-                <div className="sidebar-header">
-                    <div className="flex items-center justify-between mb-5">
-                        <div className="flex items-center gap-4">
-                            <div className="avatar">
-                                <MessageCircle className="w-6 h-6" />
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-bold text-white">Novachats</h1>
-                                <p className="text-sm text-primary-400 font-medium">@{user?.username}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <button onClick={() => setShowLinkModal(true)} className="icon-btn" title="Generate link">
-                                <Link2 className="w-5 h-5" />
-                            </button>
-                            <button onClick={() => navigate('/settings')} className="icon-btn" title="Settings">
-                                <Settings className="w-5 h-5" />
-                            </button>
-                        </div>
+            {/* Sidebar Header */}
+            <div className="sidebar-header">
+                <div className="sidebar-logo">
+                    <div className="logo-icon">
+                        <MessageCircle size={22} />
                     </div>
-
-                    {/* Search */}
-                    <div className="relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search chats..."
-                            className="sidebar-search"
-                        />
+                    <div className="logo-text">
+                        <h1>Novachats</h1>
+                        <p>@{user?.username}</p>
+                    </div>
+                    <div className="header-actions" style={{ marginLeft: 'auto' }}>
+                        <button className="icon-btn" onClick={() => setShowLinkModal(true)} title="Share Link">
+                            <Link2 size={18} />
+                        </button>
+                        <button className="icon-btn" onClick={() => navigate('/settings')} title="Settings">
+                            <Settings size={18} />
+                        </button>
                     </div>
                 </div>
 
-                {/* Chat List */}
-                <div className="flex-1 overflow-y-auto hide-scrollbar py-2">
-                    {filteredChats.length > 0 ? (
-                        filteredChats.map(chat => (
-                            <ChatListItem
-                                key={chat._id}
-                                chat={chat}
-                                isSelected={chat._id === selectedChatId}
-                                onClick={() => onChatSelect(chat)}
-                            />
-                        ))
-                    ) : (
-                        <div className="empty-state">
-                            <div className="empty-icon">
-                                <MessageCircle className="w-10 h-10 text-white" />
-                            </div>
-                            <h3 className="text-xl font-bold text-white mb-2">No chats yet</h3>
-                            <p className="text-dark-400 mb-6">Generate a link to start chatting</p>
-                            <button onClick={() => setShowLinkModal(true)} className="btn-primary">
-                                <Plus className="w-5 h-5" />
-                                New Chat
-                            </button>
-                        </div>
-                    )}
+                <div className="search-box">
+                    <Search className="search-icon" />
+                    <input
+                        type="text"
+                        className="search-input"
+                        placeholder="Search chats..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
             </div>
 
-            {/* Modal */}
+            {/* Chat List or Empty State */}
+            {filteredChats.length > 0 ? (
+                <div className="chat-list hide-scrollbar">
+                    {filteredChats.map(chat => (
+                        <ChatListItem
+                            key={chat._id}
+                            chat={chat}
+                            isSelected={chat._id === selectedChatId}
+                            onClick={() => onChatSelect(chat)}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="empty-sidebar">
+                    <div className="empty-sidebar-icon">
+                        <MessageCircle size={32} color="white" />
+                    </div>
+                    <h3>No chats yet</h3>
+                    <p>Generate a link to start chatting</p>
+                    <button className="btn-primary" onClick={() => setShowLinkModal(true)}>
+                        <Plus size={18} />
+                        New Chat
+                    </button>
+                </div>
+            )}
+
+            {/* Share Link Modal */}
             {showLinkModal && (
                 <div className="modal-overlay" onClick={() => setShowLinkModal(false)}>
-                    <div className="card-glow w-full max-w-md p-8" onClick={e => e.stopPropagation()}>
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-bold text-white">Share Chat Link</h2>
-                            <button onClick={() => setShowLinkModal(false)} className="icon-btn">
-                                <X className="w-5 h-5" />
+                    <div className="modal-card" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Share Chat Link</h2>
+                            <button className="icon-btn" onClick={() => setShowLinkModal(false)}>
+                                <X size={18} />
                             </button>
                         </div>
 
-                        <p className="text-dark-400 mb-8">
-                            Share this link to start a private chat. The link expires in 60 minutes for security.
+                        <p style={{ color: '#64748b', marginBottom: '24px', fontSize: '14px' }}>
+                            Share this link with someone to start a private chat. Links expire in 60 minutes.
                         </p>
 
                         {chatLink?.code ? (
-                            <div className="space-y-5">
-                                <div>
-                                    <div className="flex items-center justify-between mb-3">
-                                        <span className="text-xs font-bold text-dark-500 uppercase tracking-wider">Your Link</span>
-                                        <span className="text-sm text-primary-400 font-medium flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
-                                            {linkTimeRemaining}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="code-block flex-1 truncate">
-                                            {window.location.origin}/join/{chatLink.code}
-                                        </div>
-                                        <button onClick={handleCopyLink} className="btn-primary px-4 py-3">
-                                            <Copy className="w-5 h-5" />
-                                        </button>
-                                    </div>
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                                    <span style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase', fontWeight: '600', letterSpacing: '0.05em' }}>Your Link</span>
+                                    <span style={{ fontSize: '13px', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <Clock size={14} />
+                                        {linkTimeRemaining}
+                                    </span>
                                 </div>
 
-                                <button onClick={handleGenerateLink} disabled={isLoading} className="btn-secondary w-full">
-                                    <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
+                                <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
+                                    <div className="code-block" style={{ flex: 1 }}>
+                                        {window.location.origin}/join/{chatLink.code}
+                                    </div>
+                                    <button className="btn-primary" style={{ padding: '12px 16px' }} onClick={handleCopyLink}>
+                                        <Copy size={18} />
+                                    </button>
+                                </div>
+
+                                <button className="btn-secondary" style={{ width: '100%' }} onClick={handleGenerateLink} disabled={isLoading}>
+                                    <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
                                     Generate New Link
                                 </button>
                             </div>
                         ) : (
-                            <button onClick={handleGenerateLink} disabled={isLoading} className="btn-primary w-full">
-                                {isLoading ? (
-                                    <><RefreshCw className="w-5 h-5 animate-spin" /> Generating...</>
-                                ) : (
-                                    'Generate Chat Link'
-                                )}
+                            <button className="btn-primary" style={{ width: '100%' }} onClick={handleGenerateLink} disabled={isLoading}>
+                                {isLoading ? 'Generating...' : 'Generate Chat Link'}
                             </button>
                         )}
                     </div>

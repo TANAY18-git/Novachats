@@ -28,71 +28,64 @@ const EmptyChat = () => {
     };
 
     return (
-        <div className="main-content flex-1 flex flex-col items-center justify-center p-8">
-            <div className="max-w-lg w-full text-center">
-                {/* Hero Icon */}
-                <div className="relative inline-block mb-8">
-                    <div className="empty-icon">
-                        <MessageCircle className="w-12 h-12 text-white" />
+        <div className="main-empty">
+            {/* Hero Icon */}
+            <div className="main-empty-icon">
+                <MessageCircle size={48} color="white" />
+                <div className="badge-sparkle">
+                    <Sparkles size={18} color="white" />
+                </div>
+            </div>
+
+            <h2>Start a Conversation</h2>
+            <p>Select a chat from the sidebar or generate a link to invite someone to chat with you</p>
+
+            {/* Action Card */}
+            <div className="action-card">
+                <div className="action-card-header">
+                    <div className="action-card-icon">
+                        <Link2 size={24} color="white" />
                     </div>
-                    <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                        <Sparkles className="w-5 h-5 text-white" />
+                    <div className="action-card-text">
+                        <h3>Share a Chat Link</h3>
+                        <p>Anyone with the link can start chatting with you</p>
                     </div>
                 </div>
 
-                <h2 className="text-3xl font-bold text-white mb-4">Start a Conversation</h2>
-                <p className="text-lg text-dark-400 mb-10">
-                    Select a chat from the sidebar or generate a link to invite someone
-                </p>
-
-                {/* Action Card */}
-                <div className="card-glow p-8 text-left mb-10">
-                    <div className="flex items-start gap-5 mb-6">
-                        <div className="avatar">
-                            <Link2 className="w-6 h-6" />
+                {showLink && chatLink?.code ? (
+                    <div>
+                        <div className="code-block" style={{ marginBottom: '12px' }}>
+                            {window.location.origin}/join/{chatLink.code}
                         </div>
-                        <div>
-                            <h3 className="text-lg font-bold text-white mb-1">Share a Chat Link</h3>
-                            <p className="text-dark-400">Anyone with the link can start chatting with you</p>
-                        </div>
-                    </div>
-
-                    {showLink && chatLink?.code ? (
-                        <div className="space-y-4">
-                            <div className="code-block break-all">
-                                {window.location.origin}/join/{chatLink.code}
-                            </div>
-                            <button onClick={handleCopyLink} className="btn-primary w-full">
-                                Copy Link
-                            </button>
-                        </div>
-                    ) : (
-                        <button onClick={handleGenerateLink} disabled={isLoading} className="btn-primary w-full">
-                            Generate Chat Link
-                            <ArrowRight className="w-5 h-5" />
+                        <button className="btn-primary" style={{ width: '100%' }} onClick={handleCopyLink}>
+                            Copy Link
                         </button>
-                    )}
+                    </div>
+                ) : (
+                    <button className="btn-primary" style={{ width: '100%' }} onClick={handleGenerateLink} disabled={isLoading}>
+                        {isLoading ? 'Generating...' : 'Generate Chat Link'}
+                        <ArrowRight size={18} />
+                    </button>
+                )}
+            </div>
+
+            {/* How It Works */}
+            <div className="steps-section">
+                <div className="steps-title">How it works</div>
+
+                <div className="step-item">
+                    <span className="step-badge blue">1</span>
+                    <span className="step-text">Generate a unique chat link</span>
                 </div>
 
-                {/* How it works */}
-                <div className="text-left">
-                    <h4 className="text-sm font-bold text-dark-500 uppercase tracking-widest mb-5">
-                        How it works
-                    </h4>
-                    <div className="space-y-4">
-                        <div className="step-item">
-                            <span className="step-badge step-1">1</span>
-                            <span className="text-dark-200 font-medium">Generate a unique chat link</span>
-                        </div>
-                        <div className="step-item">
-                            <span className="step-badge step-2">2</span>
-                            <span className="text-dark-200 font-medium">Share the link with someone</span>
-                        </div>
-                        <div className="step-item">
-                            <span className="step-badge step-3">3</span>
-                            <span className="text-dark-200 font-medium">Start chatting in real-time</span>
-                        </div>
-                    </div>
+                <div className="step-item">
+                    <span className="step-badge purple">2</span>
+                    <span className="step-text">Share the link with someone</span>
+                </div>
+
+                <div className="step-item">
+                    <span className="step-badge green">3</span>
+                    <span className="step-text">Start chatting in real-time</span>
                 </div>
             </div>
         </div>

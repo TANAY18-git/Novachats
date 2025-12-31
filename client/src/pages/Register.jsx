@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, Eye, EyeOff, User, Lock, Mail, Loader2, Check, X } from 'lucide-react';
+import { MessageCircle, Eye, EyeOff, User, Lock, UserPlus, Loader2, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../store/authStore';
 
@@ -18,7 +18,6 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Password validation
     const passwordChecks = {
         length: formData.password.length >= 6,
         match: formData.password === formData.confirmPassword && formData.confirmPassword !== ''
@@ -45,156 +44,130 @@ const Register = () => {
         const result = await register(formData.name, formData.username, formData.password);
 
         if (result.success) {
-            toast.success('Account created successfully!');
+            toast.success('Account created!');
         } else {
             toast.error(result.message);
         }
     };
 
     return (
-        <div className="min-h-screen bg-dark-950 flex items-center justify-center p-6">
-            <div className="w-full max-w-md">
-                {/* Logo */}
-                <div className="text-center mb-8">
-                    <div className="avatar-lg mx-auto mb-4">
-                        <MessageCircle className="w-6 h-6" />
+        <div className="auth-container">
+            <div className="auth-card">
+                <div className="auth-header">
+                    <div className="auth-logo">
+                        <MessageCircle size={28} color="white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white">Create Account</h1>
-                    <p className="text-dark-400 mt-2">Join Novachats today</p>
+                    <h1>Create Account</h1>
+                    <p>Join Novachats today</p>
                 </div>
 
-                {/* Form Card */}
-                <div className="glass-card">
-                    <form onSubmit={handleSubmit}>
-                        {/* Full Name */}
-                        <div className="mb-4">
-                            <label className="form-label">Full Name</label>
-                            <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    placeholder="Enter your name"
-                                    className="form-input"
-                                />
-                            </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label className="form-label">Full Name</label>
+                        <div style={{ position: 'relative' }}>
+                            <UserPlus className="input-icon" />
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Enter your name"
+                                className="form-input"
+                            />
                         </div>
+                    </div>
 
-                        {/* Username */}
-                        <div className="mb-4">
-                            <label className="form-label">Username</label>
-                            <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
-                                <input
-                                    type="text"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                    placeholder="Choose a username"
-                                    className="form-input"
-                                />
-                            </div>
+                    <div className="form-group">
+                        <label className="form-label">Username</label>
+                        <div style={{ position: 'relative' }}>
+                            <User className="input-icon" />
+                            <input
+                                type="text"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                placeholder="Choose a username"
+                                className="form-input"
+                            />
                         </div>
+                    </div>
 
-                        {/* Password */}
-                        <div className="mb-4">
-                            <label className="form-label">Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    placeholder="Create a password"
-                                    className="form-input"
-                                    style={{ paddingRight: '44px' }}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-dark-500 hover:text-dark-300"
-                                >
-                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                </button>
-                            </div>
+                    <div className="form-group">
+                        <label className="form-label">Password</label>
+                        <div style={{ position: 'relative' }}>
+                            <Lock className="input-icon" />
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Create a password"
+                                className="form-input"
+                                style={{ paddingRight: '46px' }}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '14px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#64748b',
+                                    cursor: 'pointer',
+                                    padding: '4px'
+                                }}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
                         </div>
+                    </div>
 
-                        {/* Confirm Password */}
-                        <div className="mb-4">
-                            <label className="form-label">Confirm Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    placeholder="Confirm your password"
-                                    className="form-input"
-                                />
-                            </div>
+                    <div className="form-group">
+                        <label className="form-label">Confirm Password</label>
+                        <div style={{ position: 'relative' }}>
+                            <Lock className="input-icon" />
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                placeholder="Confirm your password"
+                                className="form-input"
+                            />
                         </div>
+                    </div>
 
-                        {/* Password Requirements */}
-                        <div className="mb-6 p-3 bg-dark-900 rounded-lg">
-                            <p className="text-xs text-dark-400 mb-2">Password requirements:</p>
-                            <div className="space-y-1">
-                                <div className="flex items-center gap-2 text-sm">
-                                    {passwordChecks.length ? (
-                                        <Check className="w-4 h-4 text-green-500" />
-                                    ) : (
-                                        <X className="w-4 h-4 text-dark-500" />
-                                    )}
-                                    <span className={passwordChecks.length ? 'text-green-400' : 'text-dark-500'}>
-                                        At least 6 characters
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                    {passwordChecks.match ? (
-                                        <Check className="w-4 h-4 text-green-500" />
-                                    ) : (
-                                        <X className="w-4 h-4 text-dark-500" />
-                                    )}
-                                    <span className={passwordChecks.match ? 'text-green-400' : 'text-dark-500'}>
-                                        Passwords match
-                                    </span>
-                                </div>
-                            </div>
+                    {/* Password Requirements */}
+                    <div style={{ marginBottom: '20px', padding: '14px', background: '#0f172a', borderRadius: '10px' }}>
+                        <div className={`password-check ${passwordChecks.length ? 'valid' : 'invalid'}`}>
+                            {passwordChecks.length ? <Check size={14} /> : <X size={14} />}
+                            At least 6 characters
                         </div>
+                        <div className={`password-check ${passwordChecks.match ? 'valid' : 'invalid'}`}>
+                            {passwordChecks.match ? <Check size={14} /> : <X size={14} />}
+                            Passwords match
+                        </div>
+                    </div>
 
-                        {/* Submit */}
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="btn-primary w-full"
-                        >
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    Creating account...
-                                </>
-                            ) : (
-                                'Create Account'
-                            )}
-                        </button>
-                    </form>
+                    <button type="submit" className="btn-primary" style={{ width: '100%' }} disabled={isLoading}>
+                        {isLoading ? (
+                            <>
+                                <Loader2 size={18} className="animate-spin" />
+                                Creating account...
+                            </>
+                        ) : (
+                            'Create Account'
+                        )}
+                    </button>
+                </form>
 
-                    {/* Login Link */}
-                    <p className="mt-6 text-center text-dark-400">
-                        Already have an account?{' '}
-                        <Link to="/login" className="link">
-                            Sign in
-                        </Link>
-                    </p>
+                <div className="auth-footer">
+                    Already have an account?{' '}
+                    <Link to="/login" className="auth-link">Sign in</Link>
                 </div>
-
-                {/* Footer */}
-                <p className="text-center text-dark-500 text-sm mt-6">
-                    Secure, private, real-time messaging
-                </p>
             </div>
         </div>
     );

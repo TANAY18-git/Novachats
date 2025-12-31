@@ -34,90 +34,81 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-dark-950 flex items-center justify-center p-6">
-            <div className="w-full max-w-md">
-                {/* Logo */}
-                <div className="text-center mb-8">
-                    <div className="avatar-lg mx-auto mb-4">
-                        <MessageCircle className="w-6 h-6" />
+        <div className="auth-container">
+            <div className="auth-card">
+                <div className="auth-header">
+                    <div className="auth-logo">
+                        <MessageCircle size={28} color="white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white">Welcome to Novachats</h1>
-                    <p className="text-dark-400 mt-2">Sign in to continue</p>
+                    <h1>Welcome to Novachats</h1>
+                    <p>Sign in to continue</p>
                 </div>
 
-                {/* Form Card */}
-                <div className="glass-card">
-                    <form onSubmit={handleSubmit}>
-                        {/* Username */}
-                        <div className="mb-5">
-                            <label className="form-label">Username</label>
-                            <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
-                                <input
-                                    type="text"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                    placeholder="Enter your username"
-                                    className="form-input"
-                                />
-                            </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label className="form-label">Username</label>
+                        <div style={{ position: 'relative' }}>
+                            <User className="input-icon" />
+                            <input
+                                type="text"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                placeholder="Enter your username"
+                                className="form-input"
+                            />
                         </div>
+                    </div>
 
-                        {/* Password */}
-                        <div className="mb-6">
-                            <label className="form-label">Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    placeholder="Enter your password"
-                                    className="form-input"
-                                    style={{ paddingRight: '44px' }}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-dark-500 hover:text-dark-300"
-                                >
-                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                </button>
-                            </div>
+                    <div className="form-group">
+                        <label className="form-label">Password</label>
+                        <div style={{ position: 'relative' }}>
+                            <Lock className="input-icon" />
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Enter your password"
+                                className="form-input"
+                                style={{ paddingRight: '46px' }}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '14px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#64748b',
+                                    cursor: 'pointer',
+                                    padding: '4px'
+                                }}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
                         </div>
+                    </div>
 
-                        {/* Submit */}
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="btn-primary w-full"
-                        >
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    Signing in...
-                                </>
-                            ) : (
-                                'Sign In'
-                            )}
-                        </button>
-                    </form>
+                    <button type="submit" className="btn-primary" style={{ width: '100%' }} disabled={isLoading}>
+                        {isLoading ? (
+                            <>
+                                <Loader2 size={18} className="animate-spin" />
+                                Signing in...
+                            </>
+                        ) : (
+                            'Sign In'
+                        )}
+                    </button>
+                </form>
 
-                    {/* Register Link */}
-                    <p className="mt-6 text-center text-dark-400">
-                        Don't have an account?{' '}
-                        <Link to="/register" className="link">
-                            Create one
-                        </Link>
-                    </p>
+                <div className="auth-footer">
+                    Don't have an account?{' '}
+                    <Link to="/register" className="auth-link">Create one</Link>
                 </div>
-
-                {/* Footer */}
-                <p className="text-center text-dark-500 text-sm mt-6">
-                    Secure, private, real-time messaging
-                </p>
             </div>
         </div>
     );
